@@ -1,19 +1,13 @@
-# Coleta de candles do WIN via MetaTrader 5
+## Timeframes coletados via MT5
 
-Script simples para pegar candles do mini indice pelo MetaTrader 5 ja aberto e logado.
+Por padrao o script busca 4 anos:
 
-## Timeframes coletados
-
-Por padrao o script busca `10_000` candles de:
-
-- `D1`
-- `H4`
-- `H1`
-- `M30`
-- `M15`
-- `M5`
-
-O `M1` ficou fora de proposito: para daytrade ele pode ser util depois, mas no comeco tende a trazer ruido e peso demais. O `M5` eu manteria, porque ainda ajuda bastante em entrada, stop, volatilidade intraday e backtest.
+- `1D`
+- `4H`
+- `1H`
+- `30M`
+- `15M`
+- `5M`
 
 ## Como usar
 

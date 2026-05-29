@@ -8,7 +8,7 @@ import MetaTrader5 as mt5
 SYMBOL = "WIN$N"
 YEARS = 4
 CHUNK_DAYS = 90
-SAVE_DIR = Path("")
+SAVE_DIR = Path("data")
 
 TIMEFRAMES = {
     "D1": mt5.TIMEFRAME_D1,
@@ -82,7 +82,7 @@ def get_candles(symbol=SYMBOL, years=YEARS):
                 print(f"{name}: nenhum candle retornado. Erro MT5: {mt5.last_error()}")
                 continue
 
-            path = save_candles(symbol, name, columns, rows)
+            path = save(name, columns, rows)
             files.append(path)
 
             print(f"{name}: {len(rows)} candles salvos em {path}.")
