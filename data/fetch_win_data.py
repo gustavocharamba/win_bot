@@ -8,7 +8,7 @@ import MetaTrader5 as mt5
 SYMBOL = "WIN$N"
 YEARS = 4
 CHUNK_DAYS = 90
-SAVE_DIR = Path("data")
+SAVE_DIR = Path("raw")
 
 TIMEFRAMES = {
     "D1": mt5.TIMEFRAME_D1,
