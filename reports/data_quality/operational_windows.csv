@@ -1,0 +1,7 @@
+name,description,market_time_start,market_time_end,datetime_market_start,datetime_market_end
+official_session,Sessao oficial de referencia,09:00,18:25,09:00,18:25
+opening_block,Abertura bloqueada v1,09:00,10:00,09:00,10:00
+decision_window,Janela de decisao v1,10:00,16:30,10:00,16:30
+stop_new_entries,Parar novas entradas,16:30,,16:30,
+flat_deadline,Zeragem simulada inicial,17:00,,17:00,
+settlement_window,Janela de ajuste B3,17:00,17:15,17:00,17:15

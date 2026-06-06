@@ -7,7 +7,10 @@ import pandas as pd
 from win_bot.gap_features import GAP_COLUMNS, add_gap_features, get_time_gaps
 
 
-DATA_DIR = Path("data")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = PROJECT_ROOT / "data"
+RAW_DATA_DIR = DATA_DIR / "raw"
+PROCESSED_DATA_DIR = DATA_DIR / "processed"
 MARKET_TIMEZONE = "America/Sao_Paulo"
 
 CSV_FILES = {
@@ -33,6 +36,8 @@ MT5_COLUMNS = [
 BASE_COLUMNS = [
     "time",
     "datetime",
+    "datetime_market",
+    "datetime_utc_to_market",
     "timeframe",
     "open",
     "high",
@@ -51,12 +56,13 @@ def empty_frame() -> pd.DataFrame:
         {
             "has_time_gap": bool,
             "is_session_start": bool,
+            "gap_direction": "int8",
         }
     )
 
 
 def resolve_csv(name: str) -> Path | None:
-    path = DATA_DIR / name
+    path = RAW_DATA_DIR / name
     candidates = [path, path.with_suffix(".csv")]
 
     for candidate in candidates:
@@ -91,15 +97,17 @@ def validate_mt5_columns(df: pd.DataFrame, path: Path) -> None:
 def normalize_mt5_dataframe(df: pd.DataFrame, timeframe: str) -> pd.DataFrame:
     df = df.copy()
     df["time"] = pd.to_numeric(df["time"])
-    df["datetime"] = (
+    df["datetime_market"] = pd.to_datetime(df["time"], unit="s")
+    df["datetime_utc_to_market"] = (
         pd.to_datetime(df["time"], unit="s", utc=True)
         .dt.tz_convert(MARKET_TIMEZONE)
         .dt.tz_localize(None)
     )
+    df["datetime"] = df["datetime_market"]
     df["timeframe"] = timeframe
 
-    df = df.sort_values("datetime")
-    df = df.drop_duplicates(subset="datetime", keep="last")
+    df = df.sort_values("datetime_market")
+    df = df.drop_duplicates(subset="datetime_market", keep="last")
     df = df.reset_index(drop=True)
 
     return df
@@ -109,12 +117,53 @@ def prepare_timeframe(timeframe: str) -> pd.DataFrame:
     return load_csv(timeframe)
 
 
-df_1d = prepare_timeframe("D1")
-df_4h = prepare_timeframe("H4")
-df_1h = prepare_timeframe("H1")
-df_30m = prepare_timeframe("M30")
-df_15m = prepare_timeframe("M15")
-df_5m = prepare_timeframe("M5")
+def processed_csv_path(timeframe: str) -> Path:
+    return PROCESSED_DATA_DIR / f"{CSV_FILES[timeframe]}_processed.csv"
+
+
+def save_processed_timeframe(timeframe: str, df: pd.DataFrame | None = None) -> Path:
+    if df is None:
+        df = prepare_timeframe(timeframe)
+
+    PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    path = processed_csv_path(timeframe)
+    df.to_csv(path, index=False)
+
+    return path
+
+
+def load_all_timeframes() -> dict[str, pd.DataFrame]:
+    return {timeframe: prepare_timeframe(timeframe) for timeframe in CSV_FILES}
+
+
+def save_processed_data(
+    frames: dict[str, pd.DataFrame] | None = None,
+) -> dict[str, Path]:
+    if frames is None:
+        frames = load_all_timeframes()
+
+    return {
+        timeframe: save_processed_timeframe(timeframe, df)
+        for timeframe, df in frames.items()
+    }
+
+
+def main() -> None:
+    frames = load_all_timeframes()
+    paths = save_processed_data(frames)
+
+    for timeframe, path in paths.items():
+        print(f"{timeframe}: {len(frames[timeframe])} candles processados em {path}.")
+
+
+_frames = load_all_timeframes()
+
+df_1d = _frames["D1"]
+df_4h = _frames["H4"]
+df_1h = _frames["H1"]
+df_30m = _frames["M30"]
+df_15m = _frames["M15"]
+df_5m = _frames["M5"]
 
 time_gaps = {
     "D1": get_time_gaps(df_1d),
@@ -124,3 +173,7 @@ time_gaps = {
     "M15": get_time_gaps(df_15m),
     "M5": get_time_gaps(df_5m),
 }
+
+
+if __name__ == "__main__":
+    main()

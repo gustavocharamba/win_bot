@@ -1,0 +1,7 @@
+timeframe,processed_exists,processed_file,processed_rows,processed_columns,missing_processed_columns,raw_rows,raw_unique_time_rows,row_delta_vs_raw_unique,first_processed_datetime,last_processed_datetime,processed_datetime_column,processed_official_pct,processed_decision_pct,duplicate_datetime_rows
+D1,True,data\processed\WIN_D1_processed.csv,997,20,,997,997,0,2022-06-02 00:00:00,2026-06-01 00:00:00,datetime_market,,,0
+H4,True,data\processed\WIN_H4_processed.csv,2987,20,,2987,2987,0,2022-06-02 08:00:00,2026-06-01 16:00:00,datetime_market,66.7559,66.7559,0
+H1,True,data\processed\WIN_H1_processed.csv,9683,20,,9683,9683,0,2022-06-02 09:00:00,2026-06-01 18:00:00,datetime_market,100.0,71.9508,0
+M30,True,data\processed\WIN_M30_processed.csv,18640,20,,18640,18640,0,2022-06-02 09:00:00,2026-06-01 18:30:00,datetime_market,99.9946,74.7532,0
+M15,True,data\processed\WIN_M15_processed.csv,37276,20,,37276,37276,0,2022-06-02 09:00:00,2026-06-01 18:30:00,datetime_market,99.9973,72.0839,0
+M5,True,data\processed\WIN_M5_processed.csv,100000,20,,100000,100000,0,2022-10-26 10:00:00,2026-06-01 18:30:00,datetime_market,99.999,70.635,0

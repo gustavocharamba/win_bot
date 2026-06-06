@@ -19,6 +19,8 @@ GAP_COLUMNS = [
     "is_session_start",
     "gap_points",
     "gap_pct",
+    "gap_abs",
+    "gap_direction",
 ]
 
 
@@ -47,9 +49,12 @@ def add_gap_features(df: pd.DataFrame, timeframe: str) -> pd.DataFrame:
     previous_close = df["close"].shift()
     df["gap_points"] = df["open"] - previous_close
     df["gap_pct"] = df["gap_points"] / previous_close.where(previous_close != 0)
+    df["gap_abs"] = df["gap_points"].abs()
+    df["gap_direction"] = 0
+    df.loc[df["gap_points"] > 0, "gap_direction"] = 1
+    df.loc[df["gap_points"] < 0, "gap_direction"] = -1
 
     return df
-
 
 def get_time_gaps(df: pd.DataFrame) -> pd.DataFrame:
     return df[df["has_time_gap"]].copy()

@@ -8,7 +8,8 @@ import MetaTrader5 as mt5
 SYMBOL = "WIN$N"
 YEARS = 4
 CHUNK_DAYS = 90
-SAVE_DIR = Path("raw")
+DATA_DIR = Path(__file__).resolve().parent
+SAVE_DIR = DATA_DIR / "raw"
 
 TIMEFRAMES = {
     "D1": mt5.TIMEFRAME_D1,
@@ -21,7 +22,7 @@ TIMEFRAMES = {
 
 
 def save(timeframe_name, columns, rows):
-    SAVE_DIR.mkdir(exist_ok=True)
+    SAVE_DIR.mkdir(parents=True, exist_ok=True)
     path = SAVE_DIR / f"WIN_{timeframe_name}.csv"
 
     with path.open("w", newline="", encoding="utf-8") as file:

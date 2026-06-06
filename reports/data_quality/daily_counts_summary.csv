@@ -1,0 +1,7 @@
+timeframe,days,min_rows_per_day,median_rows_per_day,max_rows_per_day
+D1,997,1,1.0,1
+H1,997,6,10.0,10
+H4,997,2,3.0,3
+M15,997,22,38.0,39
+M30,997,11,19.0,20
+M5,896,65,113.0,114
