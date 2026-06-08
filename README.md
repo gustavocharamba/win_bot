@@ -3,6 +3,12 @@
 Pipeline inicial para coletar candles do mini indice WIN via MetaTrader 5,
 preprocessar os dados e gerar features para modelos tabulares.
 
+## Contexto para Codex
+
+Antes de continuar o projeto em outra sessao do Codex, leia
+`README_CODEX.md`. Ele registra o contexto quant, decisoes operacionais,
+restricoes de risco, hipoteses de edge e a sequencia correta de proximas fases.
+
 ## Instalar dependencias
 
 ```powershell
